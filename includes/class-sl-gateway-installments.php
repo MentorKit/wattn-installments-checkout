@@ -196,9 +196,11 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $monthly_with_fee = $monthly_base + $fee;
         $total_payments = $monthly_with_fee * $default_months;
         $credit_cost = max(0, $total_payments - $basis);
+        $total_downpayment = $basis + $credit_cost;
         
         $default_monthly_text = $cur . ' ' . number_format($monthly_with_fee, $dec);
         $default_credit_text = $cur . ' ' . number_format($credit_cost, $dec);
+        $default_total_text = $cur . ' ' . number_format($total_downpayment, $dec);
         ?>
         <div id="sli-calc"
              data-basis="<?php echo esc_attr( number_format( $basis, 2, '.', '' ) ); ?>"
@@ -213,6 +215,10 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             <p class="wattn-calc-row wattn-calc-small">
                 <?php esc_html_e( 'Total credit cost (interest + fees):', 'sl-installments' ); ?>
                 <span id="sli-credit" class="wattn-calc-value wattn-credit-value"><?php echo esc_html($default_credit_text); ?></span>
+            </p>
+            <p class="wattn-calc-row wattn-calc-total">
+                <strong><?php esc_html_e( 'Total downpayment amount:', 'sl-installments' ); ?></strong>
+                <span id="sli-total" class="wattn-calc-value wattn-total-value"><?php echo esc_html($default_total_text); ?></span>
             </p>
         </div>
 

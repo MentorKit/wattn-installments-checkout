@@ -41,8 +41,9 @@
         
         const monthlyDisplay = document.getElementById('sli-monthly');
         const creditDisplay = document.getElementById('sli-credit');
+        const totalDisplay = document.getElementById('sli-total');
         
-        if (!monthlyDisplay || !creditDisplay) {
+        if (!monthlyDisplay || !creditDisplay || !totalDisplay) {
             return;
         }
         
@@ -89,6 +90,7 @@
             if (!selectedPlan) {
                 monthlyDisplay.textContent = '—';
                 creditDisplay.textContent = '—';
+                totalDisplay.textContent = '—';
                 return;
             }
             
@@ -100,17 +102,20 @@
             
             const monthlyText = currency + ' ' + formatNumber(monthlyWithFee, decimals);
             const creditText = currency + ' ' + formatNumber(creditCost, decimals);
+            const totalDownpayment = basis + creditCost;
+            const totalText = currency + ' ' + formatNumber(totalDownpayment, decimals);
             
-            console.log('SLI: Calculated values:', monthlyText, creditText);
+            console.log('SLI: Calculated values:', monthlyText, creditText, totalText);
             
             // Get fresh references to the elements each time
             const currentMonthly = document.getElementById('sli-monthly');
             const currentCredit = document.getElementById('sli-credit');
+            const currentTotal = document.getElementById('sli-total');
             
-            console.log('SLI: Current elements:', currentMonthly, currentCredit);
-            console.log('SLI: Current text before update:', currentMonthly ? currentMonthly.textContent : 'null', currentCredit ? currentCredit.textContent : 'null');
+            console.log('SLI: Current elements:', currentMonthly, currentCredit, currentTotal);
+            console.log('SLI: Current text before update:', currentMonthly ? currentMonthly.textContent : 'null', currentCredit ? currentCredit.textContent : 'null', currentTotal ? currentTotal.textContent : 'null');
             
-            if (currentMonthly && currentCredit) {
+            if (currentMonthly && currentCredit && currentTotal) {
                 // Try multiple methods to update
                 currentMonthly.textContent = monthlyText;
                 currentMonthly.innerHTML = monthlyText;
@@ -120,11 +125,16 @@
                 currentCredit.innerHTML = creditText;
                 currentCredit.innerText = creditText;
                 
+                currentTotal.textContent = totalText;
+                currentTotal.innerHTML = totalText;
+                currentTotal.innerText = totalText;
+                
                 // Apply CSS classes
                 currentMonthly.className = 'wattn-calc-value wattn-monthly-value';
                 currentCredit.className = 'wattn-calc-value wattn-credit-value';
+                currentTotal.className = 'wattn-calc-value wattn-total-value';
                 
-                console.log('SLI: Text after update:', currentMonthly.textContent, currentCredit.textContent);
+                console.log('SLI: Text after update:', currentMonthly.textContent, currentCredit.textContent, currentTotal.textContent);
             } else {
                 console.log('SLI: Elements not found!');
             }
