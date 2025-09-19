@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: SimplyLearn Installments
- * Plugin URI:  https://simplylearn.com/
+ * Plugin Name: Wattn Installments Checkout
+ * Plugin URI:  https://wattn.no/
  * Description: Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
  * Version: 1.2.0
- * Author: SimplyLearn AS
- * Author URI: https://simplylearn.com/
+ * Author: Wattn AS
+ * Author URI: https://wattn.no/
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * License: GPLv2 or later

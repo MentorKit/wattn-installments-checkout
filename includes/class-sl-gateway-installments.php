@@ -5,9 +5,9 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
     public function __construct() {
         $this->id                 = 'sli_installments';
-        $this->method_title       = __( 'Downpayment – External', 'sl-installments' );
+        $this->method_title       = __( 'Wattn Installments', 'sl-installments' );
         $this->method_description = __( 'Classic Checkout only. Presents 6/12/24/36 month plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.', 'sl-installments' );
-        $this->title              = __( 'Downpayment', 'sl-installments' );
+        $this->title              = __( 'Wattn Installments', 'sl-installments' );
         $this->has_fields         = true;
         $this->supports           = [ 'products' ];
 
@@ -16,7 +16,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         // Load settings
         $this->enabled      = $this->get_option( 'enabled', 'yes' );
-        $this->title        = $this->get_option( 'title', __( 'Downpayment', 'sl-installments' ) );
+        $this->title        = $this->get_option( 'title', __( 'Wattn Installments', 'sl-installments' ) );
         $this->apr_percent  = (float) $this->get_option( 'apr_percent', '0' );
         $this->monthly_fee  = (float) $this->get_option( 'monthly_fee', '30' ); // NOK per month
         $this->basis_mode   = $this->get_option( 'basis_mode', 'order_total' ); // order_total | fixed
@@ -66,7 +66,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             'title' => [
                 'title'       => __( 'Title', 'sl-installments' ),
                 'type'        => 'text',
-                'default'     => __( 'Downpayment', 'sl-installments' ),
+                'default'     => __( 'Wattn Installments', 'sl-installments' ),
                 'desc_tip'    => true,
                 'description' => __( 'Shown to customers at checkout.', 'sl-installments' ),
             ],
