@@ -5,9 +5,9 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
     public function __construct() {
         $this->id                 = 'sli_installments';
-        $this->method_title       = __( 'Downpayment – External', 'sl-installments' );
+        $this->method_title       = __( 'Wattn Installments', 'sl-installments' );
         $this->method_description = __( 'Classic Checkout only. Presents 6/12/24/36 month plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.', 'sl-installments' );
-        $this->title              = __( 'Downpayment', 'sl-installments' );
+        $this->title              = __( 'Wattn Installments', 'sl-installments' );
         $this->has_fields         = true;
         $this->supports           = [ 'products' ];
 
@@ -16,7 +16,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         // Load settings
         $this->enabled      = $this->get_option( 'enabled', 'yes' );
-        $this->title        = $this->get_option( 'title', __( 'Downpayment', 'sl-installments' ) );
+        $this->title        = $this->get_option( 'title', __( 'Wattn Installments', 'sl-installments' ) );
         $this->apr_percent  = (float) $this->get_option( 'apr_percent', '0' );
         $this->monthly_fee  = (float) $this->get_option( 'monthly_fee', '30' ); // NOK per month
         $this->basis_mode   = $this->get_option( 'basis_mode', 'order_total' ); // order_total | fixed
@@ -66,7 +66,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             'title' => [
                 'title'       => __( 'Title', 'sl-installments' ),
                 'type'        => 'text',
-                'default'     => __( 'Downpayment', 'sl-installments' ),
+                'default'     => __( 'Wattn Installments', 'sl-installments' ),
                 'desc_tip'    => true,
                 'description' => __( 'Shown to customers at checkout.', 'sl-installments' ),
             ],
@@ -168,7 +168,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             <label><input type="radio" name="sli_plan" value="6m"  required> <?php echo esc_html__( '6 months', 'sl-installments' ); ?></label>
             <label><input type="radio" name="sli_plan" value="12m" required> <?php echo esc_html__( '12 months (1 year)', 'sl-installments' ); ?></label>
             <label><input type="radio" name="sli_plan" value="24m" required> <?php echo esc_html__( '24 months (2 years)', 'sl-installments' ); ?></label>
-            <label><input type="radio" name="sli_plan" value="36m" required> <?php echo esc_html__( '36 months (3 years)', 'sl-installments' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="36m" required checked> <?php echo esc_html__( '36 months (3 years)', 'sl-installments' ); ?></label>
         </div>
 
         <p class="sli-apr-fee">
@@ -179,19 +179,46 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             ); ?></em>
         </p>
 
+<?php
+        // Calculate default values for 36 months
+        function calculateMonthlyPayment($principal, $aprPercent, $months) {
+            if ($months <= 0) return 0;
+            $r = ($aprPercent / 100) / 12.0;
+            if ($r <= 0) {
+                return $principal / $months;
+            }
+            $pow = pow(1 + $r, $months);
+            return $principal * ($r * $pow) / ($pow - 1);
+        }
+        
+        $default_months = 36;
+        $monthly_base = calculateMonthlyPayment($basis, $apr, $default_months);
+        $monthly_with_fee = $monthly_base + $fee;
+        $total_payments = $monthly_with_fee * $default_months;
+        $credit_cost = max(0, $total_payments - $basis);
+        $total_downpayment = $basis + $credit_cost;
+        
+        $default_monthly_text = $cur . ' ' . number_format($monthly_with_fee, $dec);
+        $default_credit_text = $cur . ' ' . number_format($credit_cost, $dec);
+        $default_total_text = $cur . ' ' . number_format($total_downpayment, $dec);
+        ?>
         <div id="sli-calc"
              data-basis="<?php echo esc_attr( number_format( $basis, 2, '.', '' ) ); ?>"
              data-apr="<?php echo esc_attr( number_format( $apr, 6, '.', '' ) ); ?>"
              data-fee="<?php echo esc_attr( number_format( $fee, 2, '.', '' ) ); ?>"
              data-decimals="<?php echo esc_attr( (int) $dec ); ?>"
              data-curr="<?php echo esc_attr( $cur ); ?>">
-            <p class="sli-calc-row">
+            <p class="wattn-calc-row">
                 <strong><?php esc_html_e( 'Estimated monthly payment (incl. fee):', 'sl-installments' ); ?></strong>
-                <span id="sli-monthly">—</span>
+                <span id="sli-monthly" class="wattn-calc-value wattn-monthly-value"><?php echo esc_html($default_monthly_text); ?></span>
             </p>
-            <p class="sli-calc-row sml">
+            <p class="wattn-calc-row wattn-calc-small">
                 <?php esc_html_e( 'Total credit cost (interest + fees):', 'sl-installments' ); ?>
-                <span id="sli-credit">—</span>
+                <span id="sli-credit" class="wattn-calc-value wattn-credit-value"><?php echo esc_html($default_credit_text); ?></span>
+            </p>
+            <p class="wattn-calc-row wattn-calc-total">
+                <strong><?php esc_html_e( 'Total downpayment amount:', 'sl-installments' ); ?></strong>
+                <span id="sli-total" class="wattn-calc-value wattn-total-value"><?php echo esc_html($default_total_text); ?></span>
             </p>
         </div>
 
@@ -289,19 +316,21 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
     private function code_to_months( $code ): int {
         switch ( $code ) {
+            case '6m':  return 6;
             case '12m': return 12;
             case '24m': return 24;
             case '36m': return 36;
-            default:    return 6;
+            default:    return 36; // Default to 36 months
         }
     }
 
     private function plan_label( $months ): string {
         switch ( (int) $months ) {
+            case 6:  return __( '6 months', 'sl-installments' );
             case 12: return __( '12 months (1 year)', 'sl-installments' );
             case 24: return __( '24 months (2 years)', 'sl-installments' );
             case 36: return __( '36 months (3 years)', 'sl-installments' );
-            default: return __( '6 months', 'sl-installments' );
+            default: return __( '36 months (3 years)', 'sl-installments' ); // Default to 36 months
         }
     }
 

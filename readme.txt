@@ -1,13 +1,13 @@
-=== SimplyLearn Installments ===
-Contributors: simplylearn
+=== Wattn Installments Checkout ===
+Contributors: wattn
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
+Wattn Installments Checkout - Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
 
 == Description ==
 
@@ -29,7 +29,7 @@ Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, 
 
 1. Upload the `simplylearn-installments` folder to `/wp-content/plugins/`.
 2. Activate the plugin.
-3. Go to **WooCommerce → Settings → Payments** → enable **Downpayment – External**.
+3. Go to **WooCommerce → Settings → Payments** → enable **Wattn Installments**.
 4. Set APR (%), monthly fee, and (optionally) fixed basis amount or provider settings.
 
 == Changelog ==

@@ -4,7 +4,93 @@
 .sli-plan-list label { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; cursor:pointer; }
 .sli-plan-list input[type="radio"] { transform: scale(1.1); }
 .sli-apr-fee { color:#4b5563; margin:8px 0; }
-#sli-calc { margin-top: 6px; background:#ffffff; border:1px dashed #e5e7eb; padding:10px 12px; border-radius:8px; }
-.sli-calc-row { display:flex; justify-content:space-between; margin:6px 0; }
-.sli-calc-row.sml { font-size: 0.95em; color:#374151; }
+#sli-calc { 
+    margin-top: 6px; 
+    background:#ffffff; 
+    border:1px dashed #e5e7eb; 
+    padding:10px 12px; 
+    border-radius:8px; 
+    display: block !important; 
+    visibility: visible !important; 
+    opacity: 1 !important;
+}
+.sli-calc-row { 
+    display:flex; 
+    justify-content:space-between; 
+    margin:6px 0; 
+}
+.sli-calc-row.sml { 
+    font-size: 0.95em; 
+    color:#374151; 
+}
+#sli-monthly, #sli-credit { 
+    display: inline !important; 
+    visibility: visible !important; 
+    opacity: 1 !important;
+    font-weight: bold;
+    color: #059669;
+}
 .sli-terms { margin-top:10px; }
+
+/* New Wattn Calculator Styles - very subtle and transparent */
+.wattn-calc-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 8px 0 !important;
+    align-items: center !important;
+}
+.wattn-calc-small {
+    font-size: 0.95em !important;
+    color: #374151 !important;
+}
+.wattn-calc-total {
+    font-size: 1em !important;
+    color: #1f2937 !important;
+    font-weight: 500 !important;
+    border-top: 1px solid rgba(229, 231, 235, 0.5) !important;
+    padding-top: 6px !important;
+    margin-top: 8px !important;
+}
+.wattn-calc-value {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+    color: #059669 !important;
+    background: rgba(220, 252, 231, 0.08) !important;
+    padding: 2px 4px !important;
+    border-radius: 2px !important;
+    border: 1px solid rgba(5, 150, 105, 0.1) !important;
+    min-width: 70px !important;
+    text-align: right !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    transition: all 0.2s ease !important;
+}
+.wattn-monthly-value {
+    background: rgba(220, 252, 231, 0.12) !important;
+    border-color: rgba(5, 150, 105, 0.15) !important;
+}
+.wattn-credit-value {
+    background: rgba(254, 243, 199, 0.12) !important;
+    color: #b45309 !important;
+    border-color: rgba(180, 83, 9, 0.15) !important;
+}
+.wattn-total-value {
+    background: rgba(239, 246, 255, 0.15) !important;
+    color: #1e40af !important;
+    border-color: rgba(30, 64, 175, 0.2) !important;
+    font-weight: 700 !important;
+}
+.wattn-calc-value:hover {
+    background: rgba(220, 252, 231, 0.18) !important;
+    border-color: rgba(5, 150, 105, 0.2) !important;
+}
+.wattn-credit-value:hover {
+    background: rgba(254, 243, 199, 0.18) !important;
+    border-color: rgba(180, 83, 9, 0.2) !important;
+}
+.wattn-total-value:hover {
+    background: rgba(239, 246, 255, 0.25) !important;
+    border-color: rgba(30, 64, 175, 0.3) !important;
+}
