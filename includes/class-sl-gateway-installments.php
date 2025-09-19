@@ -204,6 +204,11 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         <input type="hidden" name="sli_basis" value="<?php echo esc_attr( number_format( $basis, 2, '.', '' ) ); ?>">
         <input type="hidden" name="sl_payment_method_label" value="Wattn Installment">
+        
+        <!-- Debug button (remove in production) -->
+        <button type="button" onclick="if(window.sliUpdateCalculator) { window.sliUpdateCalculator(); } else { console.log('sliUpdateCalculator not available'); }" style="margin-top: 10px; padding: 5px 10px; background: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer;">
+            Test Calculator
+        </button>
         </div>
         <?php
     }

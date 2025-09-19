@@ -3,6 +3,15 @@
     'use strict';
     
     let initialized = false;
+    let calculatorInstance = null;
+    
+    // Make updateCalculator globally accessible
+    window.sliUpdateCalculator = function() {
+        if (calculatorInstance && calculatorInstance.updateCalculator) {
+            console.log('SimplyLearn Installments: Global updateCalculator called');
+            calculatorInstance.updateCalculator();
+        }
+    };
     
     // Wait for DOM to be ready
     function tryInit() {
@@ -128,13 +137,34 @@
             creditDisplay.textContent = creditText;
         }
         
-        // Listen for plan changes
+        // Use event delegation to handle dynamic content
+        console.log('SimplyLearn Installments: Setting up event delegation for plan changes');
+        
+        // Listen for clicks on the document and check if it's a plan radio button
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
+                console.log('SimplyLearn Installments: Plan clicked:', event.target.value);
+                setTimeout(() => {
+                    updateCalculator();
+                }, 10);
+            }
+        });
+        
+        // Also listen for change events with delegation
+        document.addEventListener('change', function(event) {
+            if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
+                console.log('SimplyLearn Installments: Plan changed to:', event.target.value);
+                updateCalculator();
+            }
+        });
+        
+        // Also add direct listeners as backup
         const planInputs = document.querySelectorAll('input[name="sli_plan"]');
-        console.log('SimplyLearn Installments: Found', planInputs.length, 'plan inputs');
+        console.log('SimplyLearn Installments: Found', planInputs.length, 'plan inputs for direct listeners');
         planInputs.forEach(function(input) {
-            console.log('SimplyLearn Installments: Adding event listener to', input.value);
+            console.log('SimplyLearn Installments: Adding direct event listener to', input.value);
             input.addEventListener('change', function() {
-                console.log('SimplyLearn Installments: Plan changed to', input.value);
+                console.log('SimplyLearn Installments: Direct listener - Plan changed to', input.value);
                 updateCalculator();
             });
         });
@@ -171,10 +201,25 @@
             }
         };
         
-        // Check visibility every 500ms for the first 10 seconds
+        // Check visibility and re-attach listeners every 500ms for the first 10 seconds
         let visibilityChecks = 0;
         const visibilityInterval = setInterval(() => {
             protectVisibility();
+            
+            // Re-attach direct listeners in case DOM was updated
+            const currentPlanInputs = document.querySelectorAll('input[name="sli_plan"]');
+            if (currentPlanInputs.length > 0) {
+                currentPlanInputs.forEach(function(input) {
+                    // Remove existing listeners to avoid duplicates
+                    input.removeEventListener('change', updateCalculator);
+                    // Add new listener
+                    input.addEventListener('change', function() {
+                        console.log('SimplyLearn Installments: Re-attached listener - Plan changed to', input.value);
+                        updateCalculator();
+                    });
+                });
+            }
+            
             visibilityChecks++;
             if (visibilityChecks >= 20) { // 10 seconds
                 clearInterval(visibilityInterval);
@@ -185,6 +230,14 @@
         // Also check on any DOM changes
         const observer = new MutationObserver(protectVisibility);
         observer.observe(document.body, { childList: true, subtree: true });
+        
+        // Store the calculator instance and updateCalculator function
+        calculatorInstance = {
+            updateCalculator: updateCalculator,
+            calcContainer: calcContainer,
+            monthlyDisplay: monthlyDisplay,
+            creditDisplay: creditDisplay
+        };
         
         // Mark as initialized
         initialized = true;
