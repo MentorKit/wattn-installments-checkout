@@ -11,7 +11,11 @@
             return;
         }
         console.log('SimplyLearn Installments: Trying to initialize calculator...');
-        initCalculator();
+        
+        // Add a small delay to ensure other scripts have finished
+        setTimeout(() => {
+            initCalculator();
+        }, 100);
     }
     
     // Try multiple events to ensure we catch the right timing
@@ -147,6 +151,40 @@
         // Initial calculation
         console.log('SimplyLearn Installments: Running initial calculation');
         updateCalculator();
+        
+        // Add visibility protection - check if calculator gets hidden
+        const protectVisibility = () => {
+            if (calcContainer && calcContainer.style.display === 'none') {
+                console.log('SimplyLearn Installments: Calculator was hidden, restoring visibility');
+                calcContainer.style.display = 'block';
+                calcContainer.style.visibility = 'visible';
+            }
+            if (monthlyDisplay && monthlyDisplay.style.display === 'none') {
+                console.log('SimplyLearn Installments: Monthly display was hidden, restoring');
+                monthlyDisplay.style.display = 'inline';
+                monthlyDisplay.style.visibility = 'visible';
+            }
+            if (creditDisplay && creditDisplay.style.display === 'none') {
+                console.log('SimplyLearn Installments: Credit display was hidden, restoring');
+                creditDisplay.style.display = 'inline';
+                creditDisplay.style.visibility = 'visible';
+            }
+        };
+        
+        // Check visibility every 500ms for the first 10 seconds
+        let visibilityChecks = 0;
+        const visibilityInterval = setInterval(() => {
+            protectVisibility();
+            visibilityChecks++;
+            if (visibilityChecks >= 20) { // 10 seconds
+                clearInterval(visibilityInterval);
+                console.log('SimplyLearn Installments: Stopped visibility protection');
+            }
+        }, 500);
+        
+        // Also check on any DOM changes
+        const observer = new MutationObserver(protectVisibility);
+        observer.observe(document.body, { childList: true, subtree: true });
         
         // Mark as initialized
         initialized = true;
