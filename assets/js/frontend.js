@@ -82,7 +82,10 @@
         
         // Update calculator display
         function updateCalculator() {
+            console.log('SLI: updateCalculator called');
             const selectedPlan = document.querySelector('input[name="sli_plan"]:checked');
+            console.log('SLI: Selected plan:', selectedPlan ? selectedPlan.value : 'none');
+            
             if (!selectedPlan) {
                 monthlyDisplay.textContent = '—';
                 creditDisplay.textContent = '—';
@@ -98,27 +101,39 @@
             const monthlyText = currency + ' ' + formatNumber(monthlyWithFee, decimals);
             const creditText = currency + ' ' + formatNumber(creditCost, decimals);
             
-            // Set the text content
-            monthlyDisplay.textContent = monthlyText;
-            creditDisplay.textContent = creditText;
+            console.log('SLI: Calculated values:', monthlyText, creditText);
             
-            // Force visibility with inline styles to prevent interference
-            monthlyDisplay.style.display = 'inline';
-            monthlyDisplay.style.visibility = 'visible';
-            monthlyDisplay.style.opacity = '1';
-            monthlyDisplay.style.color = '#059669';
-            monthlyDisplay.style.fontWeight = 'bold';
+            // Get fresh references to the elements each time
+            const currentMonthly = document.getElementById('sli-monthly');
+            const currentCredit = document.getElementById('sli-credit');
             
-            creditDisplay.style.display = 'inline';
-            creditDisplay.style.visibility = 'visible';
-            creditDisplay.style.opacity = '1';
-            creditDisplay.style.color = '#059669';
-            creditDisplay.style.fontWeight = 'bold';
+            console.log('SLI: Current elements:', currentMonthly, currentCredit);
+            console.log('SLI: Current text before update:', currentMonthly ? currentMonthly.textContent : 'null', currentCredit ? currentCredit.textContent : 'null');
+            
+            if (currentMonthly && currentCredit) {
+                // Try multiple methods to update
+                currentMonthly.textContent = monthlyText;
+                currentMonthly.innerHTML = monthlyText;
+                currentMonthly.innerText = monthlyText;
+                
+                currentCredit.textContent = creditText;
+                currentCredit.innerHTML = creditText;
+                currentCredit.innerText = creditText;
+                
+                // Apply CSS classes
+                currentMonthly.className = 'wattn-calc-value wattn-monthly-value';
+                currentCredit.className = 'wattn-calc-value wattn-credit-value';
+                
+                console.log('SLI: Text after update:', currentMonthly.textContent, currentCredit.textContent);
+            } else {
+                console.log('SLI: Elements not found!');
+            }
         }
         
         // Use event delegation to handle dynamic content
         document.addEventListener('click', function(event) {
             if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
+                console.log('SLI: Radio button clicked:', event.target.value);
                 setTimeout(() => {
                     updateCalculator();
                 }, 10);
@@ -128,6 +143,7 @@
         // Also listen for change events with delegation
         document.addEventListener('change', function(event) {
             if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
+                console.log('SLI: Radio button changed:', event.target.value);
                 updateCalculator();
             }
         });

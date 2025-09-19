@@ -179,19 +179,40 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             ); ?></em>
         </p>
 
+<?php
+        // Calculate default values for 36 months
+        function calculateMonthlyPayment($principal, $aprPercent, $months) {
+            if ($months <= 0) return 0;
+            $r = ($aprPercent / 100) / 12.0;
+            if ($r <= 0) {
+                return $principal / $months;
+            }
+            $pow = pow(1 + $r, $months);
+            return $principal * ($r * $pow) / ($pow - 1);
+        }
+        
+        $default_months = 36;
+        $monthly_base = calculateMonthlyPayment($basis, $apr, $default_months);
+        $monthly_with_fee = $monthly_base + $fee;
+        $total_payments = $monthly_with_fee * $default_months;
+        $credit_cost = max(0, $total_payments - $basis);
+        
+        $default_monthly_text = $cur . ' ' . number_format($monthly_with_fee, $dec);
+        $default_credit_text = $cur . ' ' . number_format($credit_cost, $dec);
+        ?>
         <div id="sli-calc"
              data-basis="<?php echo esc_attr( number_format( $basis, 2, '.', '' ) ); ?>"
              data-apr="<?php echo esc_attr( number_format( $apr, 6, '.', '' ) ); ?>"
              data-fee="<?php echo esc_attr( number_format( $fee, 2, '.', '' ) ); ?>"
              data-decimals="<?php echo esc_attr( (int) $dec ); ?>"
              data-curr="<?php echo esc_attr( $cur ); ?>">
-            <p class="sli-calc-row">
+            <p class="wattn-calc-row">
                 <strong><?php esc_html_e( 'Estimated monthly payment (incl. fee):', 'sl-installments' ); ?></strong>
-                <span id="sli-monthly">—</span>
+                <span id="sli-monthly" class="wattn-calc-value wattn-monthly-value"><?php echo esc_html($default_monthly_text); ?></span>
             </p>
-            <p class="sli-calc-row sml">
+            <p class="wattn-calc-row wattn-calc-small">
                 <?php esc_html_e( 'Total credit cost (interest + fees):', 'sl-installments' ); ?>
-                <span id="sli-credit">—</span>
+                <span id="sli-credit" class="wattn-calc-value wattn-credit-value"><?php echo esc_html($default_credit_text); ?></span>
             </p>
         </div>
 

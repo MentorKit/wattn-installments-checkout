@@ -31,3 +31,38 @@
     color: #059669;
 }
 .sli-terms { margin-top:10px; }
+
+/* New Wattn Calculator Styles - completely separate */
+.wattn-calc-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 8px 0 !important;
+    align-items: center !important;
+}
+.wattn-calc-small {
+    font-size: 0.95em !important;
+    color: #374151 !important;
+}
+.wattn-calc-value {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-weight: bold !important;
+    color: #059669 !important;
+    background: #f0fdf4 !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    border: 1px solid #059669 !important;
+    min-width: 80px !important;
+    text-align: right !important;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+}
+.wattn-monthly-value {
+    background: #dcfce7 !important;
+}
+.wattn-credit-value {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border-color: #92400e !important;
+}
