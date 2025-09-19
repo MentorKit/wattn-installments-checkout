@@ -25,16 +25,10 @@ require_once SLI_PLUGIN_DIR . 'includes/functions.php';
 // Register gateway - ensure WooCommerce is loaded
 add_action( 'plugins_loaded', function() {
     if ( ! class_exists( 'WooCommerce' ) ) {
-        add_action( 'admin_notices', function() {
-            echo '<div class="notice notice-error"><p>SimplyLearn Installments: WooCommerce not found</p></div>';
-        } );
         return;
     }
     
     if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
-        add_action( 'admin_notices', function() {
-            echo '<div class="notice notice-error"><p>SimplyLearn Installments: WC_Payment_Gateway not found</p></div>';
-        } );
         return;
     }
     
@@ -42,17 +36,11 @@ add_action( 'plugins_loaded', function() {
     require_once SLI_PLUGIN_DIR . 'includes/class-sl-gateway-installments.php';
     
     if ( ! class_exists( 'SLI_Gateway_Installments' ) ) {
-        add_action( 'admin_notices', function() {
-            echo '<div class="notice notice-error"><p>SimplyLearn Installments: SLI_Gateway_Installments class not found</p></div>';
-        } );
         return;
     }
     
     add_filter( 'woocommerce_payment_gateways', function( $methods ) {
         $methods[] = 'SLI_Gateway_Installments';
-        add_action( 'admin_notices', function() {
-            echo '<div class="notice notice-success"><p>SimplyLearn Installments: Gateway registered successfully</p></div>';
-        } );
         return $methods;
     } );
 } );

@@ -8,7 +8,6 @@
     // Make updateCalculator globally accessible
     window.sliUpdateCalculator = function() {
         if (calculatorInstance && calculatorInstance.updateCalculator) {
-            console.log('SimplyLearn Installments: Global updateCalculator called');
             calculatorInstance.updateCalculator();
         }
     };
@@ -16,10 +15,8 @@
     // Wait for DOM to be ready
     function tryInit() {
         if (initialized) {
-            console.log('SimplyLearn Installments: Already initialized, skipping...');
             return;
         }
-        console.log('SimplyLearn Installments: Trying to initialize calculator...');
         
         // Add a small delay to ensure other scripts have finished
         setTimeout(() => {
@@ -32,30 +29,22 @@
     document.addEventListener('load', tryInit);
     
     // Also try immediately if DOM is already ready
-    if (document.readyState === 'loading') {
-        console.log('SimplyLearn Installments: DOM still loading, waiting...');
-    } else {
-        console.log('SimplyLearn Installments: DOM already ready, initializing immediately...');
+    if (document.readyState !== 'loading') {
         tryInit();
     }
     
     function initCalculator() {
-        console.log('SimplyLearn Installments: initCalculator called');
         const calcContainer = document.getElementById('sli-calc');
         if (!calcContainer) {
-            console.log('SimplyLearn Installments: Calculator container not found');
             return;
         }
-        console.log('SimplyLearn Installments: Calculator container found');
         
         const monthlyDisplay = document.getElementById('sli-monthly');
         const creditDisplay = document.getElementById('sli-credit');
         
         if (!monthlyDisplay || !creditDisplay) {
-            console.log('SimplyLearn Installments: Monthly or credit display elements not found');
             return;
         }
-        console.log('SimplyLearn Installments: Display elements found');
         
         // Get data from container
         const basis = parseFloat(calcContainer.getAttribute('data-basis') || '0');
@@ -63,14 +52,6 @@
         const fee = parseFloat(calcContainer.getAttribute('data-fee') || '0');
         const decimals = parseInt(calcContainer.getAttribute('data-decimals') || '2');
         const currency = calcContainer.getAttribute('data-curr') || '';
-        
-        console.log('SimplyLearn Installments: Data loaded', {
-            basis: basis,
-            apr: apr,
-            fee: fee,
-            decimals: decimals,
-            currency: currency
-        });
         
         // Amortization calculation
         function calculateMonthlyPayment(principal, aprPercent, months) {
@@ -101,144 +82,43 @@
         
         // Update calculator display
         function updateCalculator() {
-            console.log('SimplyLearn Installments: updateCalculator called');
             const selectedPlan = document.querySelector('input[name="sli_plan"]:checked');
             if (!selectedPlan) {
-                console.log('SimplyLearn Installments: No plan selected');
                 monthlyDisplay.textContent = '—';
                 creditDisplay.textContent = '—';
                 return;
             }
             
-            console.log('SimplyLearn Installments: Selected plan:', selectedPlan.value);
             const months = codeToMonths(selectedPlan.value);
             const monthlyBase = calculateMonthlyPayment(basis, apr, months);
             const monthlyWithFee = monthlyBase + fee;
             const totalPayments = monthlyWithFee * months;
             const creditCost = Math.max(0, totalPayments - basis);
             
-            console.log('SimplyLearn Installments: Calculations:', {
-                months: months,
-                monthlyBase: monthlyBase,
-                monthlyWithFee: monthlyWithFee,
-                totalPayments: totalPayments,
-                creditCost: creditCost
-            });
-            
             const monthlyText = currency + ' ' + formatNumber(monthlyWithFee, decimals);
             const creditText = currency + ' ' + formatNumber(creditCost, decimals);
             
-            console.log('SimplyLearn Installments: Setting display text:', {
-                monthly: monthlyText,
-                credit: creditText
-            });
-            
-            console.log('SimplyLearn Installments: Before setting text - monthlyDisplay:', monthlyDisplay);
-            console.log('SimplyLearn Installments: Before setting text - creditDisplay:', creditDisplay);
-            
+            // Set the text content
             monthlyDisplay.textContent = monthlyText;
             creditDisplay.textContent = creditText;
             
-            console.log('SimplyLearn Installments: After setting text - monthlyDisplay.textContent:', monthlyDisplay.textContent);
-            console.log('SimplyLearn Installments: After setting text - creditDisplay.textContent:', creditDisplay.textContent);
+            // Force visibility with inline styles to prevent interference
+            monthlyDisplay.style.display = 'inline';
+            monthlyDisplay.style.visibility = 'visible';
+            monthlyDisplay.style.opacity = '1';
+            monthlyDisplay.style.color = '#059669';
+            monthlyDisplay.style.fontWeight = 'bold';
             
-            // Also try innerHTML as backup
-            monthlyDisplay.innerHTML = monthlyText;
-            creditDisplay.innerHTML = creditText;
-            
-            console.log('SimplyLearn Installments: After innerHTML - monthlyDisplay.innerHTML:', monthlyDisplay.innerHTML);
-            console.log('SimplyLearn Installments: After innerHTML - creditDisplay.innerHTML:', creditDisplay.innerHTML);
-            
-            // Check if elements are visible
-            const monthlyStyles = window.getComputedStyle(monthlyDisplay);
-            const creditStyles = window.getComputedStyle(creditDisplay);
-            
-            console.log('SimplyLearn Installments: Monthly Display Styles:', {
-                display: monthlyStyles.display,
-                visibility: monthlyStyles.visibility,
-                opacity: monthlyStyles.opacity,
-                color: monthlyStyles.color,
-                fontSize: monthlyStyles.fontSize,
-                textContent: monthlyDisplay.textContent,
-                innerHTML: monthlyDisplay.innerHTML,
-                offsetWidth: monthlyDisplay.offsetWidth,
-                offsetHeight: monthlyDisplay.offsetHeight
-            });
-            
-            console.log('SimplyLearn Installments: Credit Display Styles:', {
-                display: creditStyles.display,
-                visibility: creditStyles.visibility,
-                opacity: creditStyles.opacity,
-                color: creditStyles.color,
-                fontSize: creditStyles.fontSize,
-                textContent: creditDisplay.textContent,
-                innerHTML: creditDisplay.innerHTML,
-                offsetWidth: creditDisplay.offsetWidth,
-                offsetHeight: creditDisplay.offsetHeight
-            });
-            
-            // Force update with multiple methods
-            setTimeout(() => {
-                console.log('SimplyLearn Installments: Force updating after 100ms...');
-                
-                // Force visibility with inline styles
-                monthlyDisplay.style.display = 'inline';
-                monthlyDisplay.style.visibility = 'visible';
-                monthlyDisplay.style.opacity = '1';
-                monthlyDisplay.style.color = '#059669';
-                monthlyDisplay.style.fontWeight = 'bold';
-                
-                creditDisplay.style.display = 'inline';
-                creditDisplay.style.visibility = 'visible';
-                creditDisplay.style.opacity = '1';
-                creditDisplay.style.color = '#059669';
-                creditDisplay.style.fontWeight = 'bold';
-                
-                monthlyDisplay.textContent = monthlyText;
-                creditDisplay.textContent = creditText;
-                monthlyDisplay.innerHTML = monthlyText;
-                creditDisplay.innerHTML = creditText;
-                
-                // Try creating new text nodes
-                const monthlyTextNode = document.createTextNode(monthlyText);
-                const creditTextNode = document.createTextNode(creditText);
-                
-                // Clear and add new content
-                monthlyDisplay.innerHTML = '';
-                creditDisplay.innerHTML = '';
-                monthlyDisplay.appendChild(monthlyTextNode);
-                creditDisplay.appendChild(creditTextNode);
-                
-                console.log('SimplyLearn Installments: After force update - monthlyDisplay.textContent:', monthlyDisplay.textContent);
-                console.log('SimplyLearn Installments: After force update - creditDisplay.textContent:', creditDisplay.textContent);
-                
-                // Final visibility check
-                console.log('SimplyLearn Installments: Final visibility check:', {
-                    monthlyDisplay: {
-                        display: window.getComputedStyle(monthlyDisplay).display,
-                        visibility: window.getComputedStyle(monthlyDisplay).visibility,
-                        opacity: window.getComputedStyle(monthlyDisplay).opacity,
-                        offsetWidth: monthlyDisplay.offsetWidth,
-                        offsetHeight: monthlyDisplay.offsetHeight
-                    },
-                    creditDisplay: {
-                        display: window.getComputedStyle(creditDisplay).display,
-                        visibility: window.getComputedStyle(creditDisplay).visibility,
-                        opacity: window.getComputedStyle(creditDisplay).opacity,
-                        offsetWidth: creditDisplay.offsetWidth,
-                        offsetHeight: creditDisplay.offsetHeight
-                    }
-                });
-            }, 100);
+            creditDisplay.style.display = 'inline';
+            creditDisplay.style.visibility = 'visible';
+            creditDisplay.style.opacity = '1';
+            creditDisplay.style.color = '#059669';
+            creditDisplay.style.fontWeight = 'bold';
         }
         
         // Use event delegation to handle dynamic content
-        console.log('SimplyLearn Installments: Setting up event delegation for plan changes');
-        
-        // Listen for clicks on the document and check if it's a plan radio button
         document.addEventListener('click', function(event) {
             if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
-                console.log('SimplyLearn Installments: Plan clicked:', event.target.value);
                 setTimeout(() => {
                     updateCalculator();
                 }, 10);
@@ -248,18 +128,14 @@
         // Also listen for change events with delegation
         document.addEventListener('change', function(event) {
             if (event.target && event.target.name === 'sli_plan' && event.target.type === 'radio') {
-                console.log('SimplyLearn Installments: Plan changed to:', event.target.value);
                 updateCalculator();
             }
         });
         
         // Also add direct listeners as backup
         const planInputs = document.querySelectorAll('input[name="sli_plan"]');
-        console.log('SimplyLearn Installments: Found', planInputs.length, 'plan inputs for direct listeners');
         planInputs.forEach(function(input) {
-            console.log('SimplyLearn Installments: Adding direct event listener to', input.value);
             input.addEventListener('change', function() {
-                console.log('SimplyLearn Installments: Direct listener - Plan changed to', input.value);
                 updateCalculator();
             });
         });
@@ -267,30 +143,23 @@
         // Set default selection to 36 months
         const defaultPlan = document.querySelector('input[name="sli_plan"][value="36m"]');
         if (defaultPlan) {
-            console.log('SimplyLearn Installments: Setting default to 36 months');
             defaultPlan.checked = true;
-        } else {
-            console.log('SimplyLearn Installments: Default 36m plan not found');
         }
         
         // Initial calculation
-        console.log('SimplyLearn Installments: Running initial calculation');
         updateCalculator();
         
         // Add visibility protection - check if calculator gets hidden
         const protectVisibility = () => {
             if (calcContainer && calcContainer.style.display === 'none') {
-                console.log('SimplyLearn Installments: Calculator was hidden, restoring visibility');
                 calcContainer.style.display = 'block';
                 calcContainer.style.visibility = 'visible';
             }
             if (monthlyDisplay && monthlyDisplay.style.display === 'none') {
-                console.log('SimplyLearn Installments: Monthly display was hidden, restoring');
                 monthlyDisplay.style.display = 'inline';
                 monthlyDisplay.style.visibility = 'visible';
             }
             if (creditDisplay && creditDisplay.style.display === 'none') {
-                console.log('SimplyLearn Installments: Credit display was hidden, restoring');
                 creditDisplay.style.display = 'inline';
                 creditDisplay.style.visibility = 'visible';
             }
@@ -309,7 +178,6 @@
                     input.removeEventListener('change', updateCalculator);
                     // Add new listener
                     input.addEventListener('change', function() {
-                        console.log('SimplyLearn Installments: Re-attached listener - Plan changed to', input.value);
                         updateCalculator();
                     });
                 });
@@ -318,7 +186,6 @@
             visibilityChecks++;
             if (visibilityChecks >= 20) { // 10 seconds
                 clearInterval(visibilityInterval);
-                console.log('SimplyLearn Installments: Stopped visibility protection');
             }
         }, 500);
         
@@ -336,6 +203,5 @@
         
         // Mark as initialized
         initialized = true;
-        console.log('SimplyLearn Installments: Calculator initialized successfully');
     }
 })();
