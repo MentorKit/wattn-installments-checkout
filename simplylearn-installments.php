@@ -3,7 +3,7 @@
  * Plugin Name: Wattn Installments Checkout
  * Plugin URI:  https://wattn.no/
  * Description: Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
- * Version: 1.2.0
+ * Version: 0.1.0
  * Author: Wattn AS
  * Author URI: https://wattn.no/
  * Requires at least: 6.0
@@ -14,7 +14,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'SLI_VERSION', '1.2.0' );
+define( 'SLI_VERSION', '0.1.0' );
 define( 'SLI_PLUGIN_FILE', __FILE__ );
 define( 'SLI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
