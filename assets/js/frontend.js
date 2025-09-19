@@ -4,17 +4,27 @@
     
     // Wait for DOM to be ready
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('SimplyLearn Installments: DOM loaded, initializing calculator...');
         initCalculator();
     });
     
     function initCalculator() {
+        console.log('SimplyLearn Installments: initCalculator called');
         const calcContainer = document.getElementById('sli-calc');
-        if (!calcContainer) return;
+        if (!calcContainer) {
+            console.log('SimplyLearn Installments: Calculator container not found');
+            return;
+        }
+        console.log('SimplyLearn Installments: Calculator container found');
         
         const monthlyDisplay = document.getElementById('sli-monthly');
         const creditDisplay = document.getElementById('sli-credit');
         
-        if (!monthlyDisplay || !creditDisplay) return;
+        if (!monthlyDisplay || !creditDisplay) {
+            console.log('SimplyLearn Installments: Monthly or credit display elements not found');
+            return;
+        }
+        console.log('SimplyLearn Installments: Display elements found');
         
         // Get data from container
         const basis = parseFloat(calcContainer.getAttribute('data-basis') || '0');
@@ -22,6 +32,14 @@
         const fee = parseFloat(calcContainer.getAttribute('data-fee') || '0');
         const decimals = parseInt(calcContainer.getAttribute('data-decimals') || '2');
         const currency = calcContainer.getAttribute('data-curr') || '';
+        
+        console.log('SimplyLearn Installments: Data loaded', {
+            basis: basis,
+            apr: apr,
+            fee: fee,
+            decimals: decimals,
+            currency: currency
+        });
         
         // Amortization calculation
         function calculateMonthlyPayment(principal, aprPercent, months) {
@@ -52,36 +70,64 @@
         
         // Update calculator display
         function updateCalculator() {
+            console.log('SimplyLearn Installments: updateCalculator called');
             const selectedPlan = document.querySelector('input[name="sli_plan"]:checked');
             if (!selectedPlan) {
+                console.log('SimplyLearn Installments: No plan selected');
                 monthlyDisplay.textContent = '—';
                 creditDisplay.textContent = '—';
                 return;
             }
             
+            console.log('SimplyLearn Installments: Selected plan:', selectedPlan.value);
             const months = codeToMonths(selectedPlan.value);
             const monthlyBase = calculateMonthlyPayment(basis, apr, months);
             const monthlyWithFee = monthlyBase + fee;
             const totalPayments = monthlyWithFee * months;
             const creditCost = Math.max(0, totalPayments - basis);
             
-            monthlyDisplay.textContent = currency + ' ' + formatNumber(monthlyWithFee, decimals);
-            creditDisplay.textContent = currency + ' ' + formatNumber(creditCost, decimals);
+            console.log('SimplyLearn Installments: Calculations:', {
+                months: months,
+                monthlyBase: monthlyBase,
+                monthlyWithFee: monthlyWithFee,
+                totalPayments: totalPayments,
+                creditCost: creditCost
+            });
+            
+            const monthlyText = currency + ' ' + formatNumber(monthlyWithFee, decimals);
+            const creditText = currency + ' ' + formatNumber(creditCost, decimals);
+            
+            console.log('SimplyLearn Installments: Setting display text:', {
+                monthly: monthlyText,
+                credit: creditText
+            });
+            
+            monthlyDisplay.textContent = monthlyText;
+            creditDisplay.textContent = creditText;
         }
         
         // Listen for plan changes
         const planInputs = document.querySelectorAll('input[name="sli_plan"]');
+        console.log('SimplyLearn Installments: Found', planInputs.length, 'plan inputs');
         planInputs.forEach(function(input) {
-            input.addEventListener('change', updateCalculator);
+            console.log('SimplyLearn Installments: Adding event listener to', input.value);
+            input.addEventListener('change', function() {
+                console.log('SimplyLearn Installments: Plan changed to', input.value);
+                updateCalculator();
+            });
         });
         
         // Set default selection to 36 months
         const defaultPlan = document.querySelector('input[name="sli_plan"][value="36m"]');
         if (defaultPlan) {
+            console.log('SimplyLearn Installments: Setting default to 36 months');
             defaultPlan.checked = true;
+        } else {
+            console.log('SimplyLearn Installments: Default 36m plan not found');
         }
         
         // Initial calculation
+        console.log('SimplyLearn Installments: Running initial calculation');
         updateCalculator();
     }
 })();
