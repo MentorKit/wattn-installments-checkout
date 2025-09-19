@@ -1,0 +1,1 @@
+// SimplyLearn Installments – frontend JS (reserved for future enhancements)

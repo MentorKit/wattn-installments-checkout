@@ -1,0 +1,10 @@
+/* SimplyLearn Installments – frontend styles */
+.sli-wrap { border: 1px solid #e5e7eb; padding: 12px 14px; border-radius: 10px; background: #fafafa; }
+.sli-plan-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 14px; margin-bottom: 8px; }
+.sli-plan-list label { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; cursor:pointer; }
+.sli-plan-list input[type="radio"] { transform: scale(1.1); }
+.sli-apr-fee { color:#4b5563; margin:8px 0; }
+#sli-calc { margin-top: 6px; background:#ffffff; border:1px dashed #e5e7eb; padding:10px 12px; border-radius:8px; }
+.sli-calc-row { display:flex; justify-content:space-between; margin:6px 0; }
+.sli-calc-row.sml { font-size: 0.95em; color:#374151; }
+.sli-terms { margin-top:10px; }
