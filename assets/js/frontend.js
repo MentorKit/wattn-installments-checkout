@@ -2,11 +2,29 @@
 (function() {
     'use strict';
     
+    let initialized = false;
+    
     // Wait for DOM to be ready
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('SimplyLearn Installments: DOM loaded, initializing calculator...');
+    function tryInit() {
+        if (initialized) {
+            console.log('SimplyLearn Installments: Already initialized, skipping...');
+            return;
+        }
+        console.log('SimplyLearn Installments: Trying to initialize calculator...');
         initCalculator();
-    });
+    }
+    
+    // Try multiple events to ensure we catch the right timing
+    document.addEventListener('DOMContentLoaded', tryInit);
+    document.addEventListener('load', tryInit);
+    
+    // Also try immediately if DOM is already ready
+    if (document.readyState === 'loading') {
+        console.log('SimplyLearn Installments: DOM still loading, waiting...');
+    } else {
+        console.log('SimplyLearn Installments: DOM already ready, initializing immediately...');
+        tryInit();
+    }
     
     function initCalculator() {
         console.log('SimplyLearn Installments: initCalculator called');
@@ -129,5 +147,9 @@
         // Initial calculation
         console.log('SimplyLearn Installments: Running initial calculation');
         updateCalculator();
+        
+        // Mark as initialized
+        initialized = true;
+        console.log('SimplyLearn Installments: Calculator initialized successfully');
     }
 })();
