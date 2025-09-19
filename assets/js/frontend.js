@@ -1,1 +1,87 @@
-// SimplyLearn Installments – frontend JS (reserved for future enhancements)
+// SimplyLearn Installments – Calculator functionality
+(function() {
+    'use strict';
+    
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        initCalculator();
+    });
+    
+    function initCalculator() {
+        const calcContainer = document.getElementById('sli-calc');
+        if (!calcContainer) return;
+        
+        const monthlyDisplay = document.getElementById('sli-monthly');
+        const creditDisplay = document.getElementById('sli-credit');
+        
+        if (!monthlyDisplay || !creditDisplay) return;
+        
+        // Get data from container
+        const basis = parseFloat(calcContainer.getAttribute('data-basis') || '0');
+        const apr = parseFloat(calcContainer.getAttribute('data-apr') || '0');
+        const fee = parseFloat(calcContainer.getAttribute('data-fee') || '0');
+        const decimals = parseInt(calcContainer.getAttribute('data-decimals') || '2');
+        const currency = calcContainer.getAttribute('data-curr') || '';
+        
+        // Amortization calculation
+        function calculateMonthlyPayment(principal, aprPercent, months) {
+            if (months <= 0) return 0;
+            const r = (aprPercent / 100) / 12.0;
+            if (r <= 0) {
+                return principal / months;
+            }
+            const pow = Math.pow(1 + r, months);
+            return principal * (r * pow) / (pow - 1);
+        }
+        
+        // Convert plan code to months
+        function codeToMonths(code) {
+            switch(code) {
+                case '6m': return 6;
+                case '12m': return 12;
+                case '24m': return 24;
+                case '36m': return 36;
+                default: return 6;
+            }
+        }
+        
+        // Format number with proper decimals
+        function formatNumber(num, decimals) {
+            return Number(num).toFixed(decimals);
+        }
+        
+        // Update calculator display
+        function updateCalculator() {
+            const selectedPlan = document.querySelector('input[name="sli_plan"]:checked');
+            if (!selectedPlan) {
+                monthlyDisplay.textContent = '—';
+                creditDisplay.textContent = '—';
+                return;
+            }
+            
+            const months = codeToMonths(selectedPlan.value);
+            const monthlyBase = calculateMonthlyPayment(basis, apr, months);
+            const monthlyWithFee = monthlyBase + fee;
+            const totalPayments = monthlyWithFee * months;
+            const creditCost = Math.max(0, totalPayments - basis);
+            
+            monthlyDisplay.textContent = currency + ' ' + formatNumber(monthlyWithFee, decimals);
+            creditDisplay.textContent = currency + ' ' + formatNumber(creditCost, decimals);
+        }
+        
+        // Listen for plan changes
+        const planInputs = document.querySelectorAll('input[name="sli_plan"]');
+        planInputs.forEach(function(input) {
+            input.addEventListener('change', updateCalculator);
+        });
+        
+        // Set default selection to 36 months
+        const defaultPlan = document.querySelector('input[name="sli_plan"][value="36m"]');
+        if (defaultPlan) {
+            defaultPlan.checked = true;
+        }
+        
+        // Initial calculation
+        updateCalculator();
+    }
+})();

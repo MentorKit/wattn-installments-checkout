@@ -168,7 +168,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             <label><input type="radio" name="sli_plan" value="6m"  required> <?php echo esc_html__( '6 months', 'sl-installments' ); ?></label>
             <label><input type="radio" name="sli_plan" value="12m" required> <?php echo esc_html__( '12 months (1 year)', 'sl-installments' ); ?></label>
             <label><input type="radio" name="sli_plan" value="24m" required> <?php echo esc_html__( '24 months (2 years)', 'sl-installments' ); ?></label>
-            <label><input type="radio" name="sli_plan" value="36m" required> <?php echo esc_html__( '36 months (3 years)', 'sl-installments' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="36m" required checked> <?php echo esc_html__( '36 months (3 years)', 'sl-installments' ); ?></label>
         </div>
 
         <p class="sli-apr-fee">
@@ -289,19 +289,21 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
     private function code_to_months( $code ): int {
         switch ( $code ) {
+            case '6m':  return 6;
             case '12m': return 12;
             case '24m': return 24;
             case '36m': return 36;
-            default:    return 6;
+            default:    return 36; // Default to 36 months
         }
     }
 
     private function plan_label( $months ): string {
         switch ( (int) $months ) {
+            case 6:  return __( '6 months', 'sl-installments' );
             case 12: return __( '12 months (1 year)', 'sl-installments' );
             case 24: return __( '24 months (2 years)', 'sl-installments' );
             case 36: return __( '36 months (3 years)', 'sl-installments' );
-            default: return __( '6 months', 'sl-installments' );
+            default: return __( '36 months (3 years)', 'sl-installments' ); // Default to 36 months
         }
     }
 
