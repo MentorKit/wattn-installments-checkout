@@ -133,8 +133,61 @@
                 credit: creditText
             });
             
+            console.log('SimplyLearn Installments: Before setting text - monthlyDisplay:', monthlyDisplay);
+            console.log('SimplyLearn Installments: Before setting text - creditDisplay:', creditDisplay);
+            
             monthlyDisplay.textContent = monthlyText;
             creditDisplay.textContent = creditText;
+            
+            console.log('SimplyLearn Installments: After setting text - monthlyDisplay.textContent:', monthlyDisplay.textContent);
+            console.log('SimplyLearn Installments: After setting text - creditDisplay.textContent:', creditDisplay.textContent);
+            
+            // Also try innerHTML as backup
+            monthlyDisplay.innerHTML = monthlyText;
+            creditDisplay.innerHTML = creditText;
+            
+            console.log('SimplyLearn Installments: After innerHTML - monthlyDisplay.innerHTML:', monthlyDisplay.innerHTML);
+            console.log('SimplyLearn Installments: After innerHTML - creditDisplay.innerHTML:', creditDisplay.innerHTML);
+            
+            // Check if elements are visible
+            console.log('SimplyLearn Installments: Element visibility check:', {
+                monthlyDisplay: {
+                    display: window.getComputedStyle(monthlyDisplay).display,
+                    visibility: window.getComputedStyle(monthlyDisplay).visibility,
+                    opacity: window.getComputedStyle(monthlyDisplay).opacity,
+                    textContent: monthlyDisplay.textContent,
+                    innerHTML: monthlyDisplay.innerHTML
+                },
+                creditDisplay: {
+                    display: window.getComputedStyle(creditDisplay).display,
+                    visibility: window.getComputedStyle(creditDisplay).visibility,
+                    opacity: window.getComputedStyle(creditDisplay).opacity,
+                    textContent: creditDisplay.textContent,
+                    innerHTML: creditDisplay.innerHTML
+                }
+            });
+            
+            // Force update with multiple methods
+            setTimeout(() => {
+                console.log('SimplyLearn Installments: Force updating after 100ms...');
+                monthlyDisplay.textContent = monthlyText;
+                creditDisplay.textContent = creditText;
+                monthlyDisplay.innerHTML = monthlyText;
+                creditDisplay.innerHTML = creditText;
+                
+                // Try creating new text nodes
+                const monthlyTextNode = document.createTextNode(monthlyText);
+                const creditTextNode = document.createTextNode(creditText);
+                
+                // Clear and add new content
+                monthlyDisplay.innerHTML = '';
+                creditDisplay.innerHTML = '';
+                monthlyDisplay.appendChild(monthlyTextNode);
+                creditDisplay.appendChild(creditTextNode);
+                
+                console.log('SimplyLearn Installments: After force update - monthlyDisplay.textContent:', monthlyDisplay.textContent);
+                console.log('SimplyLearn Installments: After force update - creditDisplay.textContent:', creditDisplay.textContent);
+            }, 100);
         }
         
         // Use event delegation to handle dynamic content
