@@ -150,26 +150,50 @@
             console.log('SimplyLearn Installments: After innerHTML - creditDisplay.innerHTML:', creditDisplay.innerHTML);
             
             // Check if elements are visible
-            console.log('SimplyLearn Installments: Element visibility check:', {
-                monthlyDisplay: {
-                    display: window.getComputedStyle(monthlyDisplay).display,
-                    visibility: window.getComputedStyle(monthlyDisplay).visibility,
-                    opacity: window.getComputedStyle(monthlyDisplay).opacity,
-                    textContent: monthlyDisplay.textContent,
-                    innerHTML: monthlyDisplay.innerHTML
-                },
-                creditDisplay: {
-                    display: window.getComputedStyle(creditDisplay).display,
-                    visibility: window.getComputedStyle(creditDisplay).visibility,
-                    opacity: window.getComputedStyle(creditDisplay).opacity,
-                    textContent: creditDisplay.textContent,
-                    innerHTML: creditDisplay.innerHTML
-                }
+            const monthlyStyles = window.getComputedStyle(monthlyDisplay);
+            const creditStyles = window.getComputedStyle(creditDisplay);
+            
+            console.log('SimplyLearn Installments: Monthly Display Styles:', {
+                display: monthlyStyles.display,
+                visibility: monthlyStyles.visibility,
+                opacity: monthlyStyles.opacity,
+                color: monthlyStyles.color,
+                fontSize: monthlyStyles.fontSize,
+                textContent: monthlyDisplay.textContent,
+                innerHTML: monthlyDisplay.innerHTML,
+                offsetWidth: monthlyDisplay.offsetWidth,
+                offsetHeight: monthlyDisplay.offsetHeight
+            });
+            
+            console.log('SimplyLearn Installments: Credit Display Styles:', {
+                display: creditStyles.display,
+                visibility: creditStyles.visibility,
+                opacity: creditStyles.opacity,
+                color: creditStyles.color,
+                fontSize: creditStyles.fontSize,
+                textContent: creditDisplay.textContent,
+                innerHTML: creditDisplay.innerHTML,
+                offsetWidth: creditDisplay.offsetWidth,
+                offsetHeight: creditDisplay.offsetHeight
             });
             
             // Force update with multiple methods
             setTimeout(() => {
                 console.log('SimplyLearn Installments: Force updating after 100ms...');
+                
+                // Force visibility with inline styles
+                monthlyDisplay.style.display = 'inline';
+                monthlyDisplay.style.visibility = 'visible';
+                monthlyDisplay.style.opacity = '1';
+                monthlyDisplay.style.color = '#059669';
+                monthlyDisplay.style.fontWeight = 'bold';
+                
+                creditDisplay.style.display = 'inline';
+                creditDisplay.style.visibility = 'visible';
+                creditDisplay.style.opacity = '1';
+                creditDisplay.style.color = '#059669';
+                creditDisplay.style.fontWeight = 'bold';
+                
                 monthlyDisplay.textContent = monthlyText;
                 creditDisplay.textContent = creditText;
                 monthlyDisplay.innerHTML = monthlyText;
@@ -187,6 +211,24 @@
                 
                 console.log('SimplyLearn Installments: After force update - monthlyDisplay.textContent:', monthlyDisplay.textContent);
                 console.log('SimplyLearn Installments: After force update - creditDisplay.textContent:', creditDisplay.textContent);
+                
+                // Final visibility check
+                console.log('SimplyLearn Installments: Final visibility check:', {
+                    monthlyDisplay: {
+                        display: window.getComputedStyle(monthlyDisplay).display,
+                        visibility: window.getComputedStyle(monthlyDisplay).visibility,
+                        opacity: window.getComputedStyle(monthlyDisplay).opacity,
+                        offsetWidth: monthlyDisplay.offsetWidth,
+                        offsetHeight: monthlyDisplay.offsetHeight
+                    },
+                    creditDisplay: {
+                        display: window.getComputedStyle(creditDisplay).display,
+                        visibility: window.getComputedStyle(creditDisplay).visibility,
+                        opacity: window.getComputedStyle(creditDisplay).opacity,
+                        offsetWidth: creditDisplay.offsetWidth,
+                        offsetHeight: creditDisplay.offsetHeight
+                    }
+                });
             }, 100);
         }
         
