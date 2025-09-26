@@ -162,17 +162,17 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $cur   = get_woocommerce_currency_symbol();
 
         echo '<div class="sli-wrap">';
-        echo '<p>' . esc_html__( 'Choose a downpayment plan:', 'sl-installments' ) . '</p>';
+        echo '<p>' . esc_html( 'Velg et nedbetalingsplan:' ) . '</p>';
         ?>
         <div class="sli-plan-list">
-            <label><input type="radio" name="sli_plan" value="6m"  required> <?php echo esc_html__( '6 months', 'sl-installments' ); ?></label>
-            <label><input type="radio" name="sli_plan" value="12m" required> <?php echo esc_html__( '12 months (1 year)', 'sl-installments' ); ?></label>
-            <label><input type="radio" name="sli_plan" value="24m" required> <?php echo esc_html__( '24 months (2 years)', 'sl-installments' ); ?></label>
-            <label><input type="radio" name="sli_plan" value="36m" required> <?php echo esc_html__( '36 months (3 years)', 'sl-installments' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="6m"  required> <?php echo esc_html( '6 måneder' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="12m" required> <?php echo esc_html( '12 måneder (1 år)' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="24m" required> <?php echo esc_html( '24 måneder (2 år)' ); ?></label>
+            <label><input type="radio" name="sli_plan" value="36m" required> <?php echo esc_html( '36 måneder (3 år)' ); ?></label>
         </div>
 
         <p class="sli-apr-fee">
-            <em><?php printf( esc_html__( 'APR: %s%% • Monthly fee: %s %s', 'sl-installments' ),
+            <em><?php printf( esc_html( 'Årsrente: %s%% • Månedlig gebyr: %s %s' ),
                 esc_html( number_format( $apr, 2 ) ),
                 esc_html( $cur ),
                 esc_html( number_format( $fee, 2 ) )
@@ -186,11 +186,11 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
              data-decimals="<?php echo esc_attr( (int) $dec ); ?>"
              data-curr="<?php echo esc_attr( $cur ); ?>">
             <p class="sli-calc-row">
-                <strong><?php esc_html_e( 'Estimated monthly payment (incl. fee):', 'sl-installments' ); ?></strong>
+                <strong><?php esc_html_e( 'Estimert månedlig betaling (inkl. gebyr):' ); ?></strong>
                 <span id="sli-monthly">—</span>
             </p>
             <p class="sli-calc-row sml">
-                <?php esc_html_e( 'Total credit cost (interest + fees):', 'sl-installments' ); ?>
+                <?php esc_html_e( 'Total kredittkostnad (renter + gebyrer):' ); ?>
                 <span id="sli-credit">—</span>
             </p>
         </div>
@@ -198,7 +198,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         <p class="sli-terms">
             <label>
                 <input type="checkbox" name="sli_terms" value="1" required>
-                <?php esc_html_e( 'I accept the installment terms.', 'sl-installments' ); ?>
+                <?php esc_html_e( 'Jeg godtar nedbetalingsvilkårene.' ); ?>
             </label>
         </p>
 
@@ -215,11 +215,11 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $terms = ! empty( $_POST['sli_terms'] );
 
         if ( ! in_array( $plan, $valid_codes, true ) ) {
-            wc_add_notice( __( 'Please select a downpayment plan.', 'sl-installments' ), 'error' );
+            wc_add_notice( 'Vennligst velg en nedbetalingsplan.', 'error' );
             return false;
         }
         if ( ! $terms ) {
-            wc_add_notice( __( 'Please accept the installment terms.', 'sl-installments' ), 'error' );
+            wc_add_notice( 'Vennligst godta nedbetalingsvilkårene.', 'error' );
             return false;
         }
         return true;
@@ -298,10 +298,10 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
     private function plan_label( $months ): string {
         switch ( (int) $months ) {
-            case 12: return __( '12 months (1 year)', 'sl-installments' );
-            case 24: return __( '24 months (2 years)', 'sl-installments' );
-            case 36: return __( '36 months (3 years)', 'sl-installments' );
-            default: return __( '6 months', 'sl-installments' );
+            case 12: return '12 måneder (1 år)';
+            case 24: return '24 måneder (2 år)';
+            case 36: return '36 måneder (3 år)';
+            default: return '6 måneder';
         }
     }
 
