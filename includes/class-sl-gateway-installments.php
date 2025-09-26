@@ -190,8 +190,12 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
                 <span id="sli-monthly">—</span>
             </p>
             <p class="sli-calc-row sml">
-                <?php esc_html_e( 'Total kredittkostnad (renter + gebyrer):' ); ?>
+                <strong><?php esc_html_e( 'Total kredittkostnad (renter + gebyrer):' ); ?></strong>
                 <span id="sli-credit">—</span>
+            </p>
+            <p class="sli-calc-row sml">
+                <strong><?php esc_html_e( 'Total sum du betaler:' ); ?></strong>
+                <span id="sli-total">—</span>
             </p>
         </div>
 

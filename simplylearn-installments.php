@@ -61,7 +61,7 @@ add_action( 'plugins_loaded', function() {
 add_action( 'wp_enqueue_scripts', function() {
     if ( function_exists('is_checkout') && is_checkout() ) {
         wp_enqueue_style( 'sli-frontend', SLI_PLUGIN_URL . 'assets/css/frontend.css', [], SLI_VERSION );
-        wp_enqueue_script( 'sli-frontend', SLI_PLUGIN_URL . 'assets/js/frontend.js', [], SLI_VERSION, true );
+        wp_enqueue_script( 'sli-frontend', SLI_PLUGIN_URL . 'assets/js/frontend.js', ['jquery'], SLI_VERSION, true );
     }
 } );
 
