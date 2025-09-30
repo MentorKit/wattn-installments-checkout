@@ -262,7 +262,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $order->save();
 
         $order->payment_complete();
-        $order->add_order_note( __( 'Installment payment plan confirmed and sent to external provider.', 'sl-installments' ) );
+        $order->add_order_note( 'Avdragsplan bekreftet og sendt til ekstern leverandør.' );
 
         if ( $this->forward_mode === 'post' && ! empty( $this->provider_url ) ) {
             $payload      = $this->build_provider_payload( $order, $plan_code, $basis_used, $monthly, $total_credit_cost, $months, $apr, $fee );
@@ -359,7 +359,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             $inputs .= sprintf( '<input type="hidden" name="%s" value="%s" />', esc_attr( $k ), esc_attr( $v ) );
         }
         return '<!doctype html><html><meta charset="utf-8"><body>
-            <p>'.esc_html__( 'Redirecting to payment provider…', 'sl-installments' ).'</p>
+            <p>Omdirigerer til betalingsleverandør…</p>
             <form id="sli-forward" method="post" action="'.esc_attr( $action ).'">'.$inputs.'</form>
             <script>document.getElementById("sli-forward").submit();</script>
         </body></html>';
@@ -378,14 +378,14 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         if ( ! $label && ! $months ) return;
 
-        echo '<div class="order_data_column sli-admin-box"><h3>' . esc_html__( 'Downpayment', 'sl-installments' ) . '</h3>';
-        if ( $label )   echo '<p><strong>' . esc_html__( 'Selected plan:', 'sl-installments' ) . '</strong> ' . esc_html( $label ) . '</p>';
-        if ( $months )  echo '<p><strong>' . esc_html__( 'Months:', 'sl-installments' ) . '</strong> ' . esc_html( (int) $months ) . '</p>';
-        if ( $basis !== '' )   echo '<p><strong>' . esc_html__( 'Basis total:', 'sl-installments' ) . '</strong> ' . wc_price( (float) $basis ) . '</p>';
-        if ( $monthly !== '' ) echo '<p><strong>' . esc_html__( 'Monthly amount (incl. fee):', 'sl-installments' ) . '</strong> ' . wc_price( (float) $monthly ) . '</p>';
-        if ( $fee !== '' )     echo '<p><strong>' . esc_html__( 'Monthly fee:', 'sl-installments' ) . '</strong> ' . wc_price( (float) $fee ) . '</p>';
-        if ( $credit !== '' )  echo '<p><strong>' . esc_html__( 'Total credit cost:', 'sl-installments' ) . '</strong> ' . wc_price( (float) $credit ) . '</p>';
-        echo '<p><strong>' . esc_html__( 'Terms accepted:', 'sl-installments' ) . '</strong> ' . ( $terms ? 'Yes' : 'No' ) . '</p>';
+        echo '<div class="order_data_column sli-admin-box"><h3>Avdrag</h3>';
+        if ( $label )   echo '<p><strong>Valgt plan:</strong> ' . esc_html( $label ) . '</p>';
+        if ( $months )  echo '<p><strong>Måneder:</strong> ' . esc_html( (int) $months ) . '</p>';
+        if ( $basis !== '' )   echo '<p><strong>Grunnbeløp:</strong> ' . wc_price( (float) $basis ) . '</p>';
+        if ( $monthly !== '' ) echo '<p><strong>Månedlig beløp (inkl. gebyr):</strong> ' . wc_price( (float) $monthly ) . '</p>';
+        if ( $fee !== '' )     echo '<p><strong>Månedlig gebyr:</strong> ' . wc_price( (float) $fee ) . '</p>';
+        if ( $credit !== '' )  echo '<p><strong>Total kredittkostnad:</strong> ' . wc_price( (float) $credit ) . '</p>';
+        echo '<p><strong>Vilkår akseptert:</strong> ' . ( $terms ? 'Ja' : 'Nei' ) . '</p>';
         echo '</div>';
     }
 
@@ -400,31 +400,31 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
             if ( $label ) {
                 $fields['sli_plan'] = [
-                    'label' => __( 'Downpayment plan', 'sl-installments' ),
+                    'label' => 'Avdragsplan',
                     'value' => wp_kses_post( $label ),
                 ];
             }
             if ( $months ) {
                 $fields['sli_months'] = [
-                    'label' => __( 'Months', 'sl-installments' ),
+                    'label' => 'Måneder',
                     'value' => (int) $months,
                 ];
             }
             if ( $basis !== '' ) {
                 $fields['sli_basis'] = [
-                    'label' => __( 'Basis total', 'sl-installments' ),
+                    'label' => 'Grunnbeløp',
                     'value' => wc_price( (float) $basis ),
                 ];
             }
             if ( $monthly !== '' ) {
                 $fields['sli_monthly'] = [
-                    'label' => __( 'Monthly amount (incl. fee)', 'sl-installments' ),
+                    'label' => 'Månedlig beløp (inkl. gebyr)',
                     'value' => wc_price( (float) $monthly ),
                 ];
             }
             if ( $credit !== '' ) {
                 $fields['sli_credit'] = [
-                    'label' => __( 'Total credit cost', 'sl-installments' ),
+                    'label' => 'Total kredittkostnad',
                     'value' => wc_price( (float) $credit ),
                 ];
             }
@@ -469,13 +469,13 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         switch ( $status ) {
             case 'success':
                 $order->payment_complete( $txn ?: '' );
-                $order->add_order_note( __( 'Downpayment confirmed by provider.', 'sl-installments' ) );
+                $order->add_order_note( 'Avdrag bekreftet av leverandør.' );
                 break;
             case 'canceled':
-                $order->update_status( 'cancelled', __( 'Customer canceled at provider.', 'sl-installments' ) );
+                $order->update_status( 'cancelled', 'Kunde avbrøt hos leverandør.' );
                 break;
             default:
-                $order->update_status( 'failed', __( 'Provider reported failure/decline.', 'sl-installments' ) );
+                $order->update_status( 'failed', 'Leverandør rapporterte feil/avslag.' );
         }
         $order->save();
 
