@@ -261,7 +261,8 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $order->update_meta_data( '_sli_monthly_fee', (float) $fee );
         $order->save();
 
-        $order->update_status( 'pending', __( 'Waiting for external downpayment provider', 'sl-installments' ) );
+        $order->payment_complete();
+        $order->add_order_note( __( 'Installment payment plan confirmed and sent to external provider.', 'sl-installments' ) );
 
         if ( $this->forward_mode === 'post' && ! empty( $this->provider_url ) ) {
             $payload      = $this->build_provider_payload( $order, $plan_code, $basis_used, $monthly, $total_credit_cost, $months, $apr, $fee );

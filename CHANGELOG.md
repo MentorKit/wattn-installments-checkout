@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2 (2025-01-27)
+- **Fixed**: Orders with installment payment now complete immediately instead of remaining pending
+- **Improved**: Order status logic - installment orders are marked as completed when sent to external provider
+
 ## 1.2.1 (2025-01-27)
 - **Fixed**: Installment calculator not displaying estimates when clicking month options
 - **Added**: JavaScript calculator with real-time calculations
