@@ -3,7 +3,7 @@
  * Plugin Name: SimplyLearn Installments
  * Plugin URI:  https://simplylearn.com/
  * Description: Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: SimplyLearn AS
  * Author URI: https://simplylearn.com/
  * Requires at least: 6.0
@@ -14,7 +14,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'SLI_VERSION', '1.2.1' );
+define( 'SLI_VERSION', '1.2.2' );
 define( 'SLI_PLUGIN_FILE', __FILE__ );
 define( 'SLI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -61,7 +61,7 @@ add_action( 'plugins_loaded', function() {
 add_action( 'wp_enqueue_scripts', function() {
     if ( function_exists('is_checkout') && is_checkout() ) {
         wp_enqueue_style( 'sli-frontend', SLI_PLUGIN_URL . 'assets/css/frontend.css', [], SLI_VERSION );
-        wp_enqueue_script( 'sli-frontend', SLI_PLUGIN_URL . 'assets/js/frontend.js', [], SLI_VERSION, true );
+        wp_enqueue_script( 'sli-frontend', SLI_PLUGIN_URL . 'assets/js/frontend.js', ['jquery'], SLI_VERSION, true );
     }
 } );
 
