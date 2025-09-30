@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3 (2025-01-27)
+- **Fixed**: All email and admin interface strings now use Norwegian language
+- **Improved**: Consistent language between checkout frontend and email notifications
+- **Updated**: Order notes and admin interface labels translated to Norwegian
+- **Enhanced**: Email field labels now match checkout terminology
+
 ## 1.2.2 (2025-01-27)
 - **Fixed**: Orders with installment payment now complete immediately instead of remaining pending
 - **Improved**: Order status logic - installment orders are marked as completed when sent to external provider
