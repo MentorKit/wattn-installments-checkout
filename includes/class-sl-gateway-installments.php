@@ -247,7 +247,6 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $order->update_meta_data( '_sli_monthly_fee', (float) $fee );
         $order->save();
 
-        $order->payment_complete();
         $order->add_order_note( 'Avdragsplan bekreftet og sendt til ekstern leverandør.' );
 
         if ( $this->forward_mode === 'post' && ! empty( $this->provider_url ) ) {
