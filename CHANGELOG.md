@@ -2,7 +2,9 @@
 
 ## 1.2.4 (2025-10-07)
 - **Removed**: Isolated repayment terms checkbox from installment checkout section
+- **Removed**: Automatic order completion on installment payment processing
 - **Improved**: Simplified checkout flow by removing redundant terms acceptance field
+- **Fixed**: Order status now follows WooCommerce standard procedure instead of forcing completion
 
 ## 1.2.3 (2025-01-27)
 - **Fixed**: All email and admin interface strings now use Norwegian language
