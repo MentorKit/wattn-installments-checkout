@@ -153,7 +153,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         ];
     }
 
-    /** UI: 6/12/24/36 + calculator + terms */
+    /** UI: 6/12/24/36 + calculator */
     public function payment_fields() {
         $basis = $this->get_basis_for_context();
         $apr   = max( 0.0, (float) $this->apr_percent );
@@ -199,31 +199,19 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             </p>
         </div>
 
-        <p class="sli-terms">
-            <label>
-                <input type="checkbox" name="sli_terms" value="1" required>
-                <?php esc_html_e( 'Jeg godtar nedbetalingsvilkårene.' ); ?>
-            </label>
-        </p>
-
         <input type="hidden" name="sli_basis" value="<?php echo esc_attr( number_format( $basis, 2, '.', '' ) ); ?>">
         <input type="hidden" name="sl_payment_method_label" value="Wattn Installment">
         </div>
         <?php
     }
 
-    /** Validate selection + terms */
+    /** Validate selection */
     public function validate_fields() {
         $valid_codes = [ '6m','12m','24m','36m' ];
         $plan  = isset( $_POST['sli_plan'] ) ? sanitize_text_field( $_POST['sli_plan'] ) : '';
-        $terms = ! empty( $_POST['sli_terms'] );
 
         if ( ! in_array( $plan, $valid_codes, true ) ) {
             wc_add_notice( 'Vennligst velg en nedbetalingsplan.', 'error' );
-            return false;
-        }
-        if ( ! $terms ) {
-            wc_add_notice( 'Vennligst godta nedbetalingsvilkårene.', 'error' );
             return false;
         }
         return true;
@@ -235,7 +223,6 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         $plan_code  = sanitize_text_field( $_POST['sli_plan'] ?? '' );
         $months     = $this->code_to_months( $plan_code );
-        $terms_acc  = ! empty( $_POST['sli_terms'] );
         $basis_in   = isset( $_POST['sli_basis'] ) ? (float) $_POST['sli_basis'] : 0.0;
         $basis_used = ( $basis_in > 0 ) ? $basis_in : (float) $order->get_total();
 
@@ -252,7 +239,6 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $order->update_meta_data( 'installment_plan_months',            (int) $months );
         $order->update_meta_data( 'installment_monthly_amount',         (float) $monthly );
         $order->update_meta_data( 'installment_total_credit_cost',      (float) $total_credit_cost );
-        $order->update_meta_data( 'installment_terms_accepted',         (bool)  $terms_acc );
         $order->update_meta_data( 'payment_method_label',               'Wattn Installment' );
         if ( $basis_used > 0 ) {
             $order->update_meta_data( 'installment_calc_basis_total',   (float) $basis_used );
@@ -373,7 +359,6 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         $monthly = $order->get_meta( 'installment_monthly_amount' );
         $credit  = $order->get_meta( 'installment_total_credit_cost' );
         $basis   = $order->get_meta( 'installment_calc_basis_total' );
-        $terms   = $order->get_meta( 'installment_terms_accepted' );
         $fee     = $order->get_meta( '_sli_monthly_fee' );
 
         if ( ! $label && ! $months ) return;
@@ -385,7 +370,6 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         if ( $monthly !== '' ) echo '<p><strong>Månedlig beløp (inkl. gebyr):</strong> ' . wc_price( (float) $monthly ) . '</p>';
         if ( $fee !== '' )     echo '<p><strong>Månedlig gebyr:</strong> ' . wc_price( (float) $fee ) . '</p>';
         if ( $credit !== '' )  echo '<p><strong>Total kredittkostnad:</strong> ' . wc_price( (float) $credit ) . '</p>';
-        echo '<p><strong>Vilkår akseptert:</strong> ' . ( $terms ? 'Ja' : 'Nei' ) . '</p>';
         echo '</div>';
     }
 
