@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 (2025-10-07)
+- **Added**: Wattn customer verification system via API integration
+- **Added**: User meta field `is_wattn_customer` to track active customer status
+- **Added**: Automatic customer verification on user login and registration
+- **Added**: Helper functions `is_wattn_customer()` and `wattn_verify_customer()` for easy integration
+- **Added**: Profile update hook to re-verify customer status when user information changes
+- **Enhanced**: Comprehensive error logging for customer verification process
+
 ## 1.2.4 (2025-10-07)
 - **Removed**: Isolated repayment terms checkbox from installment checkout section
 - **Removed**: Automatic order completion on installment payment processing
