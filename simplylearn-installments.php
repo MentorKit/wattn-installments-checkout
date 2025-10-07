@@ -2,8 +2,8 @@
 /**
  * Plugin Name: SimplyLearn Installments
  * Plugin URI:  https://simplylearn.com/
- * Description: Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider.
- * Version: 1.2.4
+ * Description: Classic Checkout installments gateway with 6/12/24/36 plans, APR + monthly fee, min-total gating, and order meta storage. Optional forward to external provider. Includes Wattn customer verification.
+ * Version: 1.3.0
  * Author: SimplyLearn AS
  * Author URI: https://simplylearn.com/
  * Requires at least: 6.0
@@ -14,13 +14,51 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'SLI_VERSION', '1.2.4' );
+define( 'SLI_VERSION', '1.3.0' );
 define( 'SLI_PLUGIN_FILE', __FILE__ );
 define( 'SLI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Load functions
 require_once SLI_PLUGIN_DIR . 'includes/functions.php';
+
+// Load customer verification class
+require_once SLI_PLUGIN_DIR . 'includes/class-wattn-customer-verification.php';
+
+// Load user profile fields
+require_once SLI_PLUGIN_DIR . 'includes/class-wattn-user-profile.php';
+
+// Initialize customer verification
+add_action( 'init', function() {
+    if ( class_exists( 'Wattn_Customer_Verification' ) ) {
+        Wattn_Customer_Verification::init();
+    }
+    if ( class_exists( 'Wattn_User_Profile' ) ) {
+        Wattn_User_Profile::init();
+    }
+} );
+
+// Add admin notices for verification results
+add_action( 'admin_notices', function() {
+    if ( ! isset( $_GET['wattn_verified'] ) ) {
+        return;
+    }
+    
+    $success = $_GET['wattn_verified'] === '1';
+    $user_id = isset( $_GET['user_id'] ) ? intval( $_GET['user_id'] ) : 0;
+    
+    if ( $success ) {
+        $is_customer = get_user_meta( $user_id, 'is_wattn_customer', true );
+        $status_text = $is_customer ? 'IS an active Wattn customer' : 'is NOT an active Wattn customer';
+        echo '<div class="notice notice-success is-dismissible">';
+        echo '<p><strong>Verification Complete:</strong> This user ' . esc_html( $status_text ) . '.</p>';
+        echo '</div>';
+    } else {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>Verification Failed:</strong> Missing required user data (first name, last name, or birth date).</p>';
+        echo '</div>';
+    }
+} );
 
 // Register gateway - ensure WooCommerce is loaded
 add_action( 'plugins_loaded', function() {
