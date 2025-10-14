@@ -74,17 +74,11 @@
             '36m': 36
         };
         
-        // Amortizing loan calculation (matches PHP calc_monthly method)
+        // Simple division calculation - no interest charged (matches PHP calc_monthly method)
         function calcMonthly(principal, aprPercent, months) {
             if (months <= 0) return 0;
-            
-            const r = Math.max(0, aprPercent) / 100 / 12;
-            if (r <= 0) {
-                return principal / months;
-            }
-            
-            const pow = Math.pow(1 + r, months);
-            return principal * (r * pow) / (pow - 1);
+            // No interest calculation - simple division only
+            return principal / months;
         }
         
         // Format currency

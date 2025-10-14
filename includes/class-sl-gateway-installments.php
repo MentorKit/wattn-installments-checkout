@@ -94,10 +94,9 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
             ],
             'apr_percent' => [
                 'title'       => __( 'APR (annual interest rate, %)', 'sl-installments' ),
-                'type'        => 'number',
-                'custom_attributes' => [ 'step' => '0.01', 'min' => '0' ],
+                'type'        => 'hidden',
                 'default'     => '0',
-                'description' => __( 'Annual Percentage Rate used for the monthly payment calculation (e.g., 9.9).', 'sl-installments' ),
+                'description' => __( 'No interest is charged. This field is hidden.', 'sl-installments' ),
             ],
             'monthly_fee' => [
                 'title'       => __( 'Monthly fee (NOK)', 'sl-installments' ),
@@ -194,8 +193,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         </div>
 
         <p class="sli-apr-fee">
-            <em><?php printf( esc_html( 'Årsrente: %s%% • Månedlig gebyr: %s %s' ),
-                esc_html( number_format( $apr, 2 ) ),
+            <em><?php printf( esc_html( 'Månedlig gebyr: %s %s • Ingen renter' ),
                 esc_html( $cur ),
                 esc_html( number_format( $fee, 2 ) )
             ); ?></em>
@@ -212,7 +210,7 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
                 <span id="sli-monthly">—</span>
             </p>
             <p class="sli-calc-row sml">
-                <strong><?php esc_html_e( 'Total kredittkostnad (renter + gebyrer):' ); ?></strong>
+                <strong><?php esc_html_e( 'Total kredittkostnad:' ); ?></strong>
                 <span id="sli-credit">—</span>
             </p>
             <p class="sli-calc-row sml">
@@ -317,13 +315,11 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         }
     }
 
-    /** Amortizing monthly (without fee) */
+    /** Simple division monthly (without fee) - no interest charged */
     private function calc_monthly( $principal, $apr_percent, $months ) {
         if ( $months <= 0 ) return 0.0;
-        $r = max( 0.0, (float) $apr_percent ) / 100.0 / 12.0;
-        if ( $r <= 0.0 ) { return $principal / $months; }
-        $pow = pow( 1 + $r, $months );
-        return $principal * ( $r * $pow ) / ( $pow - 1 );
+        // No interest calculation - simple division only
+        return $principal / $months;
     }
 
     /** External payload (optional) */

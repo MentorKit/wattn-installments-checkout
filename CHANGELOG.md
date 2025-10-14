@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 (2025-10-14)
+- **Changed**: Removed 5% APR interest calculation from installment payments
+- **Simplified**: Monthly payment calculation now uses simple division (principal / months + monthly fee)
+- **Updated**: Checkout display text to reflect "no interest" pricing model
+- **Hidden**: APR field in admin settings (kept for backward compatibility but set to 0)
+- **Improved**: Clear messaging that only monthly fee (default 30 NOK) is charged, with no interest
+
 ## 1.3.1 (2025-10-14)
 - **Added**: Member-only restriction for installment payment option
 - **Added**: Prominent membership notice for non-members in checkout
