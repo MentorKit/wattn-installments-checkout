@@ -33,6 +33,9 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
 
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
 
+        // Show membership notice for non-members
+        add_action( 'woocommerce_review_order_before_payment', [ $this, 'show_membership_notice' ] );
+
         // Admin + emails
         add_action( 'woocommerce_admin_order_data_after_order_details', [ $this, 'admin_show_plan' ] );
         add_filter( 'woocommerce_email_order_meta_fields', [ $this, 'email_show_plan' ], 10, 3 );
@@ -50,9 +53,28 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
     /** Only available if basis total > min_total */
     public function is_available() {
         if ( 'yes' !== $this->enabled ) return false;
+        
+        // Check if user is a Wattn customer
+        if ( ! is_wattn_customer() ) return false;
+        
         $basis = $this->get_basis_for_context();
         if ( $basis <= $this->min_total ) return false;
         return parent::is_available();
+    }
+
+    /** Show membership notice for non-members */
+    public function show_membership_notice() {
+        if ( ! is_checkout() || is_wattn_customer() ) {
+            return;
+        }
+        
+        echo '<div class="sli-membership-notice">';
+        echo '<div class="sli-membership-content">';
+        echo '<h3>🔓 Unlock Installment Payments</h3>';
+        echo '<p>Become a Wattn member to access flexible payment plans with 6, 12, 24, or 36-month installments.</p>';
+        echo '<a href="https://wattn.no/privat/produkter/spotpris/bestill" class="sli-membership-cta" target="_blank">Become a Member →</a>';
+        echo '</div>';
+        echo '</div>';
     }
 
     public function init_form_fields() {
