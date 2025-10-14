@@ -70,9 +70,9 @@ class SLI_Gateway_Installments extends WC_Payment_Gateway {
         
         echo '<div class="sli-membership-notice">';
         echo '<div class="sli-membership-content">';
-        echo '<h3>🔓 Unlock Installment Payments</h3>';
-        echo '<p>Become a Wattn member to access flexible payment plans with 6, 12, 24, or 36-month installments.</p>';
-        echo '<a href="https://wattn.no/privat/produkter/spotpris/bestill" class="sli-membership-cta" target="_blank">Become a Member →</a>';
+        echo '<h3>Lås opp avdragsbetaling</h3>';
+        echo '<p>Bli Wattn-medlem for å få tilgang til fleksible betalingsplaner med 6, 12, 24 eller 36 måneder.</p>';
+        echo '<a href="https://wattn.no/privat/produkter/spotpris/bestill" class="sli-membership-cta" target="_blank">Bli medlem →</a>';
         echo '</div>';
         echo '</div>';
     }
