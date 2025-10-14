@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 (2025-10-14)
+- **Added**: Member-only restriction for installment payment option
+- **Added**: Prominent membership notice for non-members in checkout
+- **Added**: Visual CTA banner encouraging non-members to become Wattn customers
+- **Enhanced**: Payment gateway availability check now verifies Wattn customer status
+- **Improved**: Clear messaging about installment payment benefits for members only
+
 ## 1.3.0 (2025-10-07)
 - **Added**: Wattn customer verification system via API integration
 - **Added**: User meta field `is_wattn_customer` to track active customer status

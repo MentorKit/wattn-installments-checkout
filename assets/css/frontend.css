@@ -14,3 +14,45 @@
 .woocommerce.woocommerce-checkout #payment div.payment_box {
     background-color: #e5f1f1;
 }
+
+/* Membership notice for non-members */
+.sli-membership-notice {
+    background: rgb(229 241 241);
+    border: 1px solid rgb(0 96 84);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    color: #374151;
+}
+
+.sli-membership-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.1em;
+    color: rgb(0 96 84);
+    font-weight: 600;
+}
+
+.sli-membership-content p {
+    margin: 0 0 12px 0;
+    color: #6b7280;
+    line-height: 1.4;
+    font-size: 0.95em;
+}
+
+.sli-membership-cta {
+    display: inline-block;
+    background: rgb(0 96 84);
+    color: #fff !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.sli-membership-cta:hover {
+    background: rgb(0 80 72);
+    color: #fff !important;
+    text-decoration: none;
+}
