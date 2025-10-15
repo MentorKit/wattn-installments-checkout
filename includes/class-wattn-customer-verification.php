@@ -36,6 +36,9 @@ class Wattn_Customer_Verification {
         
         // Hook into profile update (optional - updates when user changes their info)
         add_action( 'profile_update', [ __CLASS__, 'on_profile_update' ], 10, 2 );
+        
+        // Hook into checkout page load to verify member status when benefits apply
+        add_action( 'woocommerce_before_checkout_form', [ __CLASS__, 'on_checkout_page' ], 5 );
     }
     
     /**
@@ -91,6 +94,17 @@ class Wattn_Customer_Verification {
             if ( $should_update ) {
                 self::update_customer_status( $user_id );
             }
+        }
+    }
+    
+    /**
+     * Handle checkout page load event
+     * Updates customer status when user visits checkout to ensure benefits are current
+     */
+    public static function on_checkout_page() {
+        if ( is_user_logged_in() ) {
+            $user_id = get_current_user_id();
+            self::update_customer_status( $user_id );
         }
     }
     

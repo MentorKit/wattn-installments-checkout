@@ -3,7 +3,7 @@
  * Plugin Name: SimplyLearn Installments
  * Plugin URI:  https://simplylearn.com/
  * Description: Classic Checkout installments gateway with 6/12/24/36 plans, monthly fee (no interest), min-total gating, and order meta storage. Optional forward to external provider. Includes Wattn customer verification.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: SimplyLearn AS
  * Author URI: https://simplylearn.com/
  * Requires at least: 6.0
@@ -14,7 +14,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'SLI_VERSION', '1.4.0' );
+define( 'SLI_VERSION', '1.4.1' );
 define( 'SLI_PLUGIN_FILE', __FILE__ );
 define( 'SLI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

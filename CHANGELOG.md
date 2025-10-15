@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1 (2025-10-15)
+- **Enhanced**: Wattn customer verification now triggers on checkout page load
+- **Improved**: Member status is refreshed when approaching checkout to ensure benefits are current
+- **Added**: Automatic verification check before payment methods are displayed
+- **Fixed**: Member benefits now accurately reflect real-time customer status at checkout
+
 ## 1.4.0 (2025-10-14)
 - **Changed**: Removed 5% APR interest calculation from installment payments
 - **Simplified**: Monthly payment calculation now uses simple division (principal / months + monthly fee)
